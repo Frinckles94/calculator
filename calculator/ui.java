@@ -5,49 +5,54 @@ import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*; 
 
-public class ui implements ActionListener{
+public class UI implements ActionListener{
 
     private JFrame frame;
-    private JPanel panel, subpanel1,subpanel2;
+    private JPanel panel;
     private GridBagConstraints gbc;
 
     private JTextField textField;
 
-    private JButton b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDot, bEq;
-    private JButton bAdd, bMinus, bMultiply, bDivide; 
+    private JButton b[], bDot, bEq;
+    private JButton bAdd, bMinus, bMultiply, bDivide, bPow, bSqrt, bClear, bDel;
+    
+    private Calculator calc;
 
-    ui(){
+    UI(){
         frame = new JFrame("Calculator");
         frame.setSize(400, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        panel.setSize(300,450);
+        panel.setSize(400,600);
 
         gbc = new GridBagConstraints();
-        gbc.weightx = 0;
-        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
 
         textField = new JTextField(11);
 
 
-        b0 = new JButton("0");
-        b1 = new JButton("1");
-        b2 = new JButton("2");
-        b3 = new JButton("3");
-        b4 = new JButton("4");
-        b5 = new JButton("5");
-        b6 = new JButton("6");
-        b7 = new JButton("7");
-        b8 = new JButton("8");
-        b9 = new JButton("9");
+        b = new JButton[10];      
+        for (int i = 0; i < 10; i++) {
+            b[i] = new JButton(String.valueOf(i));
+            b[i].addActionListener(this);
+        }    
+
+
         bEq = new JButton("=");
         bDot = new JButton(".");
-        
         bAdd = new JButton("+");
         bMinus = new JButton("-");
         bMultiply = new JButton("*");
+        bDivide = new JButton("/");
+        bPow = new JButton("^");
+        bClear = new JButton("C");
+        bDel = new JButton("DEL");
+        bSqrt = new JButton("sqrt");
+
         
         // Adding text field
         gbc.gridheight = 1;
@@ -56,68 +61,127 @@ public class ui implements ActionListener{
         gbc.gridy = 0;
         panel.add(textField, gbc);
 
-        // Adding 9 
+
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
-        gbc.gridx = 3;
-        gbc.gridy = 1;
-        panel.add(b9, gbc);
-        // Adding 8
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        panel.add(b8, gbc);
-        // Adding 7
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panel.add(b7, gbc);
-        // Adding 6
-        gbc.gridx = 3;
-        gbc.gridy = 2;
-        panel.add(b6, gbc);
-        // Adding 5
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        panel.add(b5, gbc);
-        // Adding 4
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        panel.add(b4, gbc);
-        // Adding 3
-        gbc.gridx = 3;
-        gbc.gridy = 3;
-        panel.add(b3, gbc);
-        // Adding 2
-        gbc.gridx = 2;
-        gbc.gridy = 3;
-        panel.add(b2, gbc);
-        // Adding 1
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        panel.add(b1, gbc);
+
+
+
         // Adding 0
-        gbc.gridx = 2;
-        gbc.gridy = 4;
-        panel.add(b0, gbc);
-        // Adding =
-        gbc.gridx = 3;
-        gbc.gridy = 4;
-        panel.add(bEq, gbc);
-        // Adding dot
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
+        panel.add(b[0], gbc);
+        // Adding 1..9
+        for(int y=2; y<5; y++){
+            for(int x=0; x<3; x++){
+                gbc.gridx = x;
+                gbc.gridy = y;
+                int i = 13-3*y+x;
+                panel.add(b[i], gbc);
+            }
+        }
+        // Adding =
+        gbc.gridx = 2;
+        gbc.gridy = 5;
+        panel.add(bEq, gbc);
+        bEq.addActionListener(this);
+        // Adding dot
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         panel.add(bDot, gbc);
+        bDot.addActionListener(this);
+        //Adding C
+        gbc.gridx = 4;
+        gbc.gridy = 2;
+        panel.add(bClear, gbc);
+        bClear.addActionListener(this);
+        //Adding DEL
+        gbc.gridx = 4;
+        gbc.gridy = 3;
+        panel.add(bDel, gbc);
+        bDel.addActionListener(this);
+        //Adding +
+        gbc.gridx = 4;
+        gbc.gridy = 5;
+        panel.add(bAdd, gbc);
+        bAdd.addActionListener(this);
+        //Adding -
+        //Adding *
+        //Adding Sqrt
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        panel.add(bSqrt, gbc);
+        bSqrt.addActionListener(this);
 
         frame.add(panel);
-        
-
-
         frame.setVisible(true);
+
+        calc = new Calculator();
     }
 
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    public void actionPerformed(ActionEvent ae) {
+        String[] expr;
+        String command = ae.getActionCommand();
+        System.out.println(ae.getActionCommand());
+        //System.out.println(object);
+        
+
+
+
+        switch(command){
+            case "C":
+                textField.setText("");
+                break;
+            case "DEL":
+                int length = textField.getText().length();
+                textField.select(length-1, length);
+                textField.replaceSelection("");
+                break;
+            case ".":
+                expr = calc.parse(textField.getText());
+                if(expr[1] == ""){
+                    if(expr[0] == "") textField.replaceSelection("0"+command);
+                    else if(!calc.checkDot(expr[0])) textField.replaceSelection(command);
+                }else{
+                    if(expr[2] == "") textField.replaceSelection("0"+command);
+                    else if(!calc.checkDot(expr[2])) textField.replaceSelection(command);
+                }
+                break;
+            case "+":
+                expr = calc.parse(textField.getText());
+                if(expr[1] == ""){
+                    textField.replaceSelection(command);
+                }else{
+
+                }
+                break;
+            case "sqrt":
+                expr = calc.parse(textField.getText());
+                if(expr[1] == ""){
+
+                }else{
+
+                }
+                break;
+            case "=":
+                break;
+            case "0":
+                expr = calc.parse(textField.getText());
+                int length1 = expr[0].length();
+                int length2 = expr[2].length();
+                System.out.println(textField.getText().length());
+                if(expr[1] == ""){
+                    if(!(length1==1 && expr[0].charAt(0) == '0')) textField.replaceSelection(command);
+                }else{
+                    if(!(length2==1 && expr[2].charAt(0) == '0')) textField.replaceSelection(command);
+                }
+                break;
+            default:
+                textField.replaceSelection(command);
+        }
+
     }
     
 }
