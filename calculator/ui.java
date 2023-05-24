@@ -32,7 +32,7 @@ public class UI implements ActionListener{
         gbc.weightx = 1;
         gbc.weighty = 1;
 
-        textField = new JTextField(11);
+        textField = new JTextField(10);
 
 
         b = new JButton[10];      
@@ -56,7 +56,7 @@ public class UI implements ActionListener{
         
         // Adding text field
         gbc.gridheight = 1;
-        gbc.gridwidth = 4; // acting weird in combination with textField width
+        gbc.gridwidth = 4; 
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(textField, gbc);
@@ -91,27 +91,46 @@ public class UI implements ActionListener{
         panel.add(bDot, gbc);
         bDot.addActionListener(this);
         //Adding C
-        gbc.gridx = 4;
-        gbc.gridy = 2;
+        gbc.gridx = 2;
+        gbc.gridy = 1;
         panel.add(bClear, gbc);
         bClear.addActionListener(this);
         //Adding DEL
-        gbc.gridx = 4;
-        gbc.gridy = 3;
+        gbc.gridx = 3;
+        gbc.gridy = 1;
         panel.add(bDel, gbc);
         bDel.addActionListener(this);
         //Adding +
-        gbc.gridx = 4;
+        gbc.gridx = 3;
         gbc.gridy = 5;
         panel.add(bAdd, gbc);
         bAdd.addActionListener(this);
         //Adding -
-        //Adding *
-        //Adding Sqrt
-        gbc.gridx = 4;
+        gbc.gridx = 3;
         gbc.gridy = 4;
+        panel.add(bMinus, gbc);
+        bMinus.addActionListener(this);
+        //Adding *
+        gbc.gridx = 3;
+        gbc.gridy = 3;
+        panel.add(bMultiply, gbc);
+        bMultiply.addActionListener(this);
+        //Adding Sqrt
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         panel.add(bSqrt, gbc);
         bSqrt.addActionListener(this);
+        //Adding /
+        gbc.gridx = 3;
+        gbc.gridy = 2;
+        panel.add(bDivide, gbc);
+        bDivide.addActionListener(this);
+        //Adding ^
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(bPow, gbc);
+        bPow.addActionListener(this);
+        
 
         frame.add(panel);
         frame.setVisible(true);
