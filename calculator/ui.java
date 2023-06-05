@@ -159,115 +159,106 @@ public class UI implements ActionListener{
         String text = textField.getText();
         String command = ae.getActionCommand();
         int length;
-        int cLength = command.length();
         //System.out.println(ae.getActionCommand());
         //System.out.println();
         
-        if(cLength == 1){
-            char cCommand = command.charAt(0);
-            if(cCommand >= '0' && cCommand <= '9'){
-                expr = calc.parse(text);
-                int length1 = expr[0].length();
-                int length2 = expr[2].length();
-                if(cCommand == '0'){
-                    if(expr[1] == ""){
-                        if(!(length1==1 && expr[0].charAt(0) == '0')) textField.replaceSelection(command);
-                    }else{
-                        if(!(length2==1 && expr[2].charAt(0) == '0')) textField.replaceSelection(command);
-                    }
+        char cCommand = command.charAt(0);
+        if(cCommand >= '0' && cCommand <= '9'){
+            expr = calc.parse(text);
+            int length1 = expr[0].length();
+            int length2 = expr[2].length();
+            if(cCommand == '0'){
+                if(expr[1] == ""){
+                    if(!(length1==1 && expr[0].charAt(0) == '0')) textField.replaceSelection(command);
                 }else{
-                    if(expr[1] == ""){
-                        if(length1==1 && expr[0].charAt(0) == '0'){
-                            textField.select(0, 1);
-                            textField.replaceSelection(command);
-                        }else textField.replaceSelection(command);
-                    }else{
-                        if(length2==1 && expr[2].charAt(0) == '0'){
-                            length = text.length();
+                    if(!(length2==1 && expr[2].charAt(0) == '0')) textField.replaceSelection(command);
+                }
+            }else{
+                if(expr[1] == ""){
+                    if(length1==1 && expr[0].charAt(0) == '0'){
+                        textField.select(0, 1);
+                        textField.replaceSelection(command);
+                    }else textField.replaceSelection(command);
+                }else{
+                    if(length2==1 && expr[2].charAt(0) == '0'){
+                        length = text.length();
+                        textField.select(length-1, length);
+                        textField.replaceSelection(command);
+                    }else textField.replaceSelection(command);
+                }
+                
+            } 
+
+        }else if(command == "C"){
+            textField.setText("");
+
+        }else if(command == "DEL"){
+            length = text.length();
+            textField.select(length-1, length);
+            textField.replaceSelection("");
+        }else{
+            expr = calc.parse(text);
+            length = text.length();
+
+
+            if(expr[1] == ""){
+                if(expr[0] == ""){
+                    if(command == sqrt){
+                        textField.setText(calc.calculateRoot("0"));
+                        updateH();
+                    } 
+                    else textField.replaceSelection("0"+command);
+                }else{
+                    if(expr[0].charAt(length-1) == '.') textField.replaceSelection("0");
+                    else if(expr[0].charAt(length-1) == 'E') textField.replaceSelection("1");
+                    if(command != "="){
+                        if(command == "."){
+                            if(!calc.checkDot(expr[0])) textField.replaceSelection(command);
+                        } 
+                        else if(command == sqrt){
+                            expr = calc.parse(textField.getText());
+                            textField.setText(calc.calculateRoot(expr[0]));
+                            updateH();
+                        }
+                        else textField.replaceSelection(command);
+                    } 
+                }
+                
+            }else{
+                if(expr[2] == ""){
+                    if(command != "="){
+                        if(command == ".") textField.replaceSelection("0"+command);
+                        else if(command == sqrt){
+                            textField.setText(expr[0]+expr[1]+calc.calculateRoot(expr[0]));
+                            updateH();
+                        } 
+                        else{
                             textField.select(length-1, length);
                             textField.replaceSelection(command);
-                        }else textField.replaceSelection(command);
-                    }
-                    
-                } 
-
-                
-                
-            }else if(command == "C"){
-                textField.setText("");
-
-            }else{
-                expr = calc.parse(text);
-                
-                if (command == sqrt){
-                    if(expr[1] == ""){
-                        if(expr[0] != ""){
-                            
-                            textField.setText(calc.calculateRoot(expr[0]));
-                        }else{
-                            textField.setText(calc.calculateRoot("0"));
-                        }
-                    }else{
-                        if(expr[2] != ""){
-                            textField.setText(expr[0]+expr[1]+calc.calculateRoot(expr[2]));
-                        }else{
-                            textField.setText(expr[0]+expr[1]+calc.calculateRoot(expr[0]));
-                            
                         }
                     }
                 }else{
-                    length = text.length();
-                    if(expr[1] == ""){
-                        if(expr[0] == ""){
-                            
-                            textField.replaceSelection("0"+command);
-                        }else{
-                            if(expr[0].charAt(length-1) == '.') textField.replaceSelection("0");
-                            else if(expr[0].charAt(length-1) == 'E') textField.replaceSelection("1");
-                            if(command != "="){
-                                if(command == "."){
-                                    if(!calc.checkDot(expr[0])) textField.replaceSelection(command);
-                                }
-                                else textField.replaceSelection(command);
-                            } 
-                        }
+                    if(command == "."){
+                        if(!calc.checkDot(expr[2])) textField.replaceSelection(command);
                         
                     }else{
-                        if(expr[2] == ""){
-                            if(command != "="){
-                                if(command == ".") textField.replaceSelection("0"+command); 
-                                else{
-                                    textField.select(length-1, length);
-                                    textField.replaceSelection(command);
-                                }
-                            }
-                        }else{
-                            if(command == "."){
-                                if(!calc.checkDot(expr[2])) textField.replaceSelection(command);
-                                
-                            }else{
-                                if(text.charAt(length-1) == '.'){
-                                    textField.replaceSelection("0");
-                                    expr = calc.parse(textField.getText());
-                                } 
-                                textField.setText(calc.calculate(expr));
-                                if(command != "=") textField.replaceSelection(command);
-                            }
+                        if(text.charAt(length-1) == '.'){
+                            textField.replaceSelection("0");
+                            expr = calc.parse(textField.getText());
                         }
-
+                        if(command == sqrt) textField.setText(expr[0]+expr[1]+calc.calculateRoot(expr[2]));
+                        else{
+                            textField.setText(calc.calculate(expr));
+                            if(command != "=") textField.replaceSelection(command);
+                        } 
+                        updateH();
                     }
                 }
-                updateH();
-            } 
-        }else{
-            if(command == "DEL"){
-                length = textField.getText().length();
-                textField.select(length-1, length);
-                textField.replaceSelection("");
+
             }
-        }
-
-
+            
+            
+        } 
 
     }
     
