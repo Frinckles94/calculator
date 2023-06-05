@@ -94,7 +94,6 @@ public class Calculator{
     public String calculateRoot(String expr){
       double result = Math.sqrt(Double.parseDouble(expr));
       remember("\u221A"+"("+expr+")="+result+"\n");
-      System.out.println("\u221A"+"("+expr+")="+result+"\n");
       return String.valueOf(result);
     }
 

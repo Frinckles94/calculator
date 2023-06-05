@@ -149,7 +149,6 @@ public class UI implements ActionListener{
 
     public void updateH(){
         String res = calc.getHValue();
-        System.out.println(res);
         hArea.setText(res);
     }
 
@@ -161,7 +160,7 @@ public class UI implements ActionListener{
         String command = ae.getActionCommand();
         int length;
         int cLength = command.length();
-        System.out.println(ae.getActionCommand());
+        //System.out.println(ae.getActionCommand());
         //System.out.println();
         
         if(cLength == 1){
@@ -200,19 +199,10 @@ public class UI implements ActionListener{
             }else{
                 expr = calc.parse(text);
                 
-                if(command == "."){
-                    if(expr[1] == ""){
-                        if(expr[0] == "") textField.replaceSelection("0"+command);
-                        else if(!calc.checkDot(expr[0])) textField.replaceSelection(command);
-
-                    }else{
-                        if(expr[2] == "") textField.replaceSelection("0"+command);
-                        else if(!calc.checkDot(expr[2])) textField.replaceSelection(command);
-                    }
-                    
-                }else if (command == sqrt){
+                if (command == sqrt){
                     if(expr[1] == ""){
                         if(expr[0] != ""){
+                            
                             textField.setText(calc.calculateRoot(expr[0]));
                         }else{
                             textField.setText(calc.calculateRoot("0"));
@@ -226,29 +216,43 @@ public class UI implements ActionListener{
                         }
                     }
                 }else{
-                    
                     length = text.length();
                     if(expr[1] == ""){
                         if(expr[0] == ""){
+                            
                             textField.replaceSelection("0"+command);
                         }else{
                             if(expr[0].charAt(length-1) == '.') textField.replaceSelection("0");
                             else if(expr[0].charAt(length-1) == 'E') textField.replaceSelection("1");
-                            if(command != "=") textField.replaceSelection(command);
+                            if(command != "="){
+                                if(command == "."){
+                                    if(!calc.checkDot(expr[0])) textField.replaceSelection(command);
+                                }
+                                else textField.replaceSelection(command);
+                            } 
                         }
                         
                     }else{
                         if(expr[2] == ""){
-                            if(command != "="){ 
-                                textField.select(length-1, length);
-                                textField.replaceSelection(command);
+                            if(command != "="){
+                                if(command == ".") textField.replaceSelection("0"+command); 
+                                else{
+                                    textField.select(length-1, length);
+                                    textField.replaceSelection(command);
+                                }
                             }
                         }else{
-                            if(text.charAt(length-1) == '.') textField.replaceSelection("0");
-                            textField.setText(calc.calculate(expr));
-                            
-                            if(command != "=") textField.replaceSelection(command);
-
+                            if(command == "."){
+                                if(!calc.checkDot(expr[2])) textField.replaceSelection(command);
+                                
+                            }else{
+                                if(text.charAt(length-1) == '.'){
+                                    textField.replaceSelection("0");
+                                    expr = calc.parse(textField.getText());
+                                } 
+                                textField.setText(calc.calculate(expr));
+                                if(command != "=") textField.replaceSelection(command);
+                            }
                         }
 
                     }
