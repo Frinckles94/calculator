@@ -211,8 +211,22 @@ public class UI implements ActionListener{
                     }
                     
                 }else if (command == sqrt){
-                    
+                    if(expr[1] == ""){
+                        if(expr[0] != ""){
+                            textField.setText(calc.calculateRoot(expr[0]));
+                        }else{
+                            textField.setText(calc.calculateRoot("0"));
+                        }
+                    }else{
+                        if(expr[2] != ""){
+                            textField.setText(expr[0]+expr[1]+calc.calculateRoot(expr[2]));
+                        }else{
+                            textField.setText(expr[0]+expr[1]+calc.calculateRoot(expr[0]));
+                            
+                        }
+                    }
                 }else{
+                    
                     length = text.length();
                     if(expr[1] == ""){
                         if(expr[0] == ""){
@@ -229,17 +243,17 @@ public class UI implements ActionListener{
                                 textField.select(length-1, length);
                                 textField.replaceSelection(command);
                             }
-                            // else can throw error
                         }else{
                             if(text.charAt(length-1) == '.') textField.replaceSelection("0");
                             textField.setText(calc.calculate(expr));
-                            updateH();
+                            
                             if(command != "=") textField.replaceSelection(command);
 
                         }
 
                     }
                 }
+                updateH();
             } 
         }else{
             if(command == "DEL"){
