@@ -87,8 +87,13 @@ public class Calculator{
           result = Math.pow(Double.parseDouble(expr[0]), Double.parseDouble(expr[2]));
           break;
       }
-      remember(expr[0]+expr[1]+expr[2]+"="+result+"\n");
-      return String.valueOf(result);
+      if(result == Double.POSITIVE_INFINITY || result == Double.NEGATIVE_INFINITY){
+        return "Invalid Input";
+      }else{
+        remember(expr[0]+expr[1]+expr[2]+"="+result+"\n");
+        return String.valueOf(result);
+      }
+      
     }
 
     public String calculateRoot(String expr){
