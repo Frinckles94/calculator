@@ -90,7 +90,7 @@ public class Calculator{
       if(result == Double.POSITIVE_INFINITY || result == Double.NEGATIVE_INFINITY){
         return "Invalid Input";
       }else{
-        remember(expr[0]+expr[1]+expr[2]+"="+result+"\n");
+        remember(expr[0]+" "+expr[1]+" "+expr[2]+" "+"="+" "+result+"\n");
         return String.valueOf(result);
       }
       

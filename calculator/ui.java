@@ -3,7 +3,8 @@ package calculator;
 
 import java.awt.*; 
 import java.awt.event.*; 
-import javax.swing.*; 
+import javax.swing.*;
+
 
 public class UI implements ActionListener{
 
@@ -11,17 +12,19 @@ public class UI implements ActionListener{
     private JPanel panel;
     private GridBagConstraints gbc;
 
+    private JScrollPane areaPane;
     private JTextField textField;
     private JTextArea hArea;
 
     private JButton b[], bDot, bEq;
-    private JButton bAdd, bMinus, bMultiply, bDivide, bPow, bSqrt, bClear, bDel, btest;
+    private JButton bAdd, bMinus, bMultiply, bDivide, bPow, bSqrt, bClear, bDel;
     
     private Calculator calc;
 
     private static final String sqrt = "\u221A";
 
     UI(){
+        
         frame = new JFrame("Calculator");
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -40,6 +43,8 @@ public class UI implements ActionListener{
 
         hArea = new JTextArea(15,20);
         hArea.setEditable(false);
+
+        areaPane = new JScrollPane(hArea);
 
         b = new JButton[10];      
         for (int i = 0; i < 10; i++) {
@@ -64,13 +69,15 @@ public class UI implements ActionListener{
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(textField, gbc);
+        textField.setFont(textField.getFont().deriveFont(16f));
         
         // Adding history bar
         gbc.gridheight = 6;
         gbc.gridwidth = 3; 
         gbc.gridx = 4;
         gbc.gridy = 0;
-        panel.add(hArea, gbc);
+        panel.add(areaPane, gbc);
+        hArea.setFont(hArea.getFont().deriveFont(20f));
 
 
         gbc.gridheight = 1;
