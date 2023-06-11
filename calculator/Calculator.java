@@ -2,7 +2,6 @@ package calculator;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.SwingUtilities;
 
 public class Calculator{
@@ -35,10 +34,6 @@ public class Calculator{
         }
       }
       return result; 
-    }
-
-    public void evaluate(String[] expr){
-        
     }
 
     public void remember(String res){
